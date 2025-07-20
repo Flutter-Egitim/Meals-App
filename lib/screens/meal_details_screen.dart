@@ -14,10 +14,13 @@ class MealDetailsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                meal.imageUrl,
-                width: double.infinity,
-                fit: BoxFit.contain,
+              Hero(
+                tag: meal.id,
+                child: Image.network(
+                  meal.imageUrl,
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                ),
               ),
               SizedBox(height: 16),
               Padding(

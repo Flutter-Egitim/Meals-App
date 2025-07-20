@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   final themeProvider = ThemeProvider();
+  themeProvider.loadThemeMode();
 
   runApp(ChangeNotifierProvider.value(value: themeProvider, child: App()));
 }
@@ -22,14 +24,14 @@ class App extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Color.fromARGB(255, 29, 120, 157),
+              seedColor: Color.fromARGB(255, 143, 157, 52),
               brightness: Brightness.light,
             ),
             textTheme: GoogleFonts.latoTextTheme(),
           ),
           darkTheme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Color.fromARGB(255, 29, 120, 157),
+              seedColor: Color.fromARGB(255, 232, 255, 82),
               brightness: Brightness.dark,
             ),
             textTheme: GoogleFonts.latoTextTheme(),

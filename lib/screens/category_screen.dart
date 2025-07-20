@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/models/category.dart';
 import 'package:meals_app/screens/meals_screen.dart';
+import 'package:meals_app/screens/settings_screen.dart';
 import 'package:meals_app/widgets/category_grid_item.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -24,7 +25,21 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Select Category")),
+      appBar: AppBar(
+        title: Text("Select Category"),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return SettingsScreen();
+                },
+              ),
+            ),
+            icon: Icon(Icons.settings),
+          ),
+        ],
+      ),
       body: GridView(
         padding: EdgeInsets.all(16),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
