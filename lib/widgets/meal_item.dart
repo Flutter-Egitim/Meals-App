@@ -4,20 +4,27 @@ import 'package:meals_app/screens/meal_details_screen.dart';
 import 'package:meals_app/widgets/meal_item_meatadata.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MealItem extends StatelessWidget {
+class MealItem extends StatefulWidget {
   final Meal meal;
 
   const MealItem({super.key, required this.meal});
 
+  @override
+  State<MealItem> createState() => _MealItemState();
+}
+
+class _MealItemState extends State<MealItem> {
   String get affordabilityText {
-    return meal.affordability.name[0].toUpperCase() +
-        meal.affordability.name.substring(1).toLowerCase();
+    return widget.meal.affordability.name[0].toUpperCase() +
+        widget.meal.affordability.name.substring(1).toLowerCase();
   }
 
   String get complexityText {
-    return meal.complexity.name[0].toUpperCase() +
-        meal.complexity.name.substring(1).toLowerCase();
+    return widget.meal.complexity.name[0].toUpperCase() +
+        widget.meal.complexity.name.substring(1).toLowerCase();
   }
+
+  bool isMealFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,7 @@ class MealItem extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
-                return MealDetailsScreen(meal: meal);
+                return MealDetailsScreen(meal: widget.meal);
               },
             ),
           );
@@ -35,13 +42,29 @@ class MealItem extends StatelessWidget {
         child: Stack(
           children: [
             Hero(
-              tag: meal.id,
+              tag: widget.meal.id,
               child: FadeInImage(
                 placeholder: MemoryImage(kTransparentImage),
-                image: NetworkImage(meal.imageUrl),
+                image: NetworkImage(widget.meal.imageUrl),
                 height: 250,
                 fit: BoxFit.cover,
                 width: double.infinity,
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    isMealFavorite = !isMealFavorite;
+                    // value notifierdaki listeye ekle
+                  });
+                },
+                icon: Icon(
+                  isMealFavorite ? Icons.favorite : Icons.favorite_outline,
+                  color: isMealFavorite ? Colors.pink : Colors.white,
+                ),
               ),
             ),
             Positioned(
@@ -56,7 +79,7 @@ class MealItem extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40.0),
                       child: Text(
-                        meal.title,
+                        widget.meal.title,
                         maxLines: 2,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis, // uzun bir yazı...
@@ -72,7 +95,7 @@ class MealItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MealItemMeatadata(
-                          label: "${meal.duration} min",
+                          label: "${widget.meal.duration} min",
                           icon: Icons.schedule,
                         ),
                         SizedBox(width: 4),
