@@ -1,0 +1,38 @@
+{
+    "Global": {
+        "settings": "Settings",
+        "language": "Language",
+        "about": "About",
+        "version": "App version"
+    },
+    "Settings": {
+        "apperience": "Appearance",
+        "theme-mode": "Theme Mode",
+        "system": {
+            "title": "System Default",
+            "description": "Use the system's default theme mode."
+        },
+        "light": {
+            "title": "Light Mode",
+            "description": "Use a light theme."
+        },
+        "dark": {
+            "title": "Dark Mode",
+            "description": "Use a dark theme."
+        }
+    },
+    "Language": {
+        "title": "Language",
+        "en": {
+            "title": "English",
+            "description": "Use English language."
+        },
+        "tr": {
+            "title": "Türkçe",
+            "description": "Türkçe dilini kullanın."
+        }
+    },
+    "About": {
+        "discover": "Discover delicious recipes"
+    }
+}

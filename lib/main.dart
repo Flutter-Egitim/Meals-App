@@ -1,17 +1,34 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:meals_app/providers/filter_provider.dart';
 import 'package:meals_app/providers/theme_provider.dart';
-import 'package:meals_app/screens/category_screen.dart';
 import 'package:meals_app/widget_tree.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final themeProvider = ThemeProvider();
-  themeProvider.loadThemeMode();
-
-  runApp(ChangeNotifierProvider.value(value: themeProvider, child: App()));
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('en', 'US'), Locale('tr', 'TR')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en', 'US'),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) {
+              final themeProvider = ThemeProvider();
+              themeProvider.loadThemeMode();
+              return themeProvider;
+            },
+          ),
+          ChangeNotifierProvider(create: (_) => FilterProvider()),
+        ],
+        child: const App(),
+      ),
+    ),
+  );
 }
 
 class App extends StatelessWidget {
@@ -22,6 +39,9 @@ class App extends StatelessWidget {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
         return MaterialApp(
+          locale: context.locale,
+          supportedLocales: context.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(

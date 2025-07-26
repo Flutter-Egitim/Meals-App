@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/data/notifiers.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/screens/meal_details_screen.dart';
 import 'package:meals_app/widgets/meal_item_meatadata.dart';
@@ -51,21 +52,32 @@ class _MealItemState extends State<MealItem> {
                 width: double.infinity,
               ),
             ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    isMealFavorite = !isMealFavorite;
-                    // value notifierdaki listeye ekle
-                  });
-                },
-                icon: Icon(
-                  isMealFavorite ? Icons.favorite : Icons.favorite_outline,
-                  color: isMealFavorite ? Colors.pink : Colors.white,
-                ),
-              ),
+            ValueListenableBuilder(
+              valueListenable: favoriteListNotifier,
+              builder: (context, favorites, child) {
+                final isFavorite = favorites.contains(widget.meal);
+                return Positioned(
+                  top: 0,
+                  right: 0,
+                  child: IconButton(
+                    onPressed: () {
+                      final currentFavorites = List<Meal>.from(
+                        favoriteListNotifier.value,
+                      );
+                      if (isFavorite) {
+                        currentFavorites.remove(widget.meal);
+                      } else {
+                        currentFavorites.add(widget.meal);
+                      }
+                      favoriteListNotifier.value = currentFavorites;
+                    },
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_outline,
+                      color: isFavorite ? Colors.pink : Colors.white,
+                    ),
+                  ),
+                );
+              },
             ),
             Positioned(
               bottom: 0,

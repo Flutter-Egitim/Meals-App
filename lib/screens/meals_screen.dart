@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/data/notifiers.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/widgets/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
-  final String title;
+  final String? title;
   final List<Meal> meals;
 
-  const MealsScreen({super.key, required this.title, required this.meals});
+  const MealsScreen({super.key, this.title, required this.meals});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,34 @@ class MealsScreen extends StatelessWidget {
       ),
     );
 
-    if (meals.isNotEmpty) {
+    if (title == null) {
+      content = ValueListenableBuilder(
+        valueListenable: favoriteListNotifier,
+        builder: (context, favorites, child) {
+          if (favorites.isEmpty) {
+            return Center(
+              child: Text(
+                textAlign: TextAlign.center,
+                "You did not add any meals to your favorites",
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+            );
+          }
+          return ListView.builder(
+            itemCount: favorites.length,
+            itemBuilder: (context, index) {
+              return MealItem(meal: favorites[index]);
+            },
+          );
+        },
+      );
+
+      return content;
+    }
+
+    if (meals.isNotEmpty && title != "") {
       content = ListView.builder(
         itemCount: meals.length,
         itemBuilder: (context, index) {
@@ -40,9 +68,13 @@ class MealsScreen extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(title: Text(title), centerTitle: false),
-      body: content,
-    );
+    if (title != null) {
+      return Scaffold(
+        appBar: AppBar(title: Text(title!), centerTitle: false),
+        body: content,
+      );
+    }
+
+    return content;
   }
 }

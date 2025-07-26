@@ -1,0 +1,38 @@
+{
+    "Global": {
+        "settings": "Ayarlar",
+        "language": "Dil",
+        "about": "Hakkında",
+        "version": "Uygulama sürümü"
+    },
+    "Settings": {
+        "apperience": "Görünüm",
+        "theme-mode": "Tema Modu",
+        "system": {
+            "title": "Sistem Varsayılanı",
+            "description": "Sistemin varsayılan tema modunu kullanın."
+        },
+        "light": {
+            "title": "Aydınlık Mod",
+            "description": "Aydınlık bir tema kullanın."
+        },
+        "dark": {
+            "title": "Karanlık Mod",
+            "description": "Karanlık bir tema kullanın."
+        }
+    },
+    "Language": {
+        "title": "Dil",
+        "en": {
+            "title": "English",
+            "description": "Use English language."
+        },
+        "tr": {
+            "title": "Türkçe",
+            "description": "Türkçe dilini kullanın."
+        }
+    },
+    "About": {
+        "discover": "Muhteşem lezzetleri keşfet"
+    }
+}

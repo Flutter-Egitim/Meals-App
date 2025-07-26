@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:meals_app/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,110 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  Widget _buildInfoCard() {
+    return Card(
+      color: Colors.transparent,
+      elevation: 0,
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            ListTile(
+              leading: Icon(
+                Icons.info,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              title: Text(
+                tr("Global.version"),
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              subtitle: Text(
+                "1.0.0",
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              contentPadding: EdgeInsets.zero,
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.restaurant_menu),
+              title: Text(
+                "Meals App",
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              subtitle: Text(tr("About.discover")),
+              contentPadding: EdgeInsets.zero,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageCard() {
+    final easyLocalization = EasyLocalization.of(context)!;
+    final supportedLocales = easyLocalization.supportedLocales;
+    final currentLocale = easyLocalization.locale;
+
+    return Card(
+      color: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.language,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                SizedBox(width: 12),
+                Text(
+                  tr("Global.language"),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            ...supportedLocales.map(
+              (locale) => ListTile(
+                leading: Icon(Icons.flag),
+                title: Text(
+                  locale.languageCode.toUpperCase() +
+                      (locale.countryCode != null
+                          ? ' (${locale.countryCode})'
+                          : ''),
+                ),
+                trailing: Radio<Locale>(
+                  value: locale,
+                  groupValue: currentLocale,
+                  onChanged: (Locale? value) {
+                    if (value != null) {
+                      context.setLocale(value);
+                    }
+                  },
+                  activeColor: Theme.of(context).colorScheme.primary,
+                ),
+                onTap: () => context.setLocale(locale),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
@@ -37,7 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  "Theme Mode",
+                  tr("Settings.theme-mode"),
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.w600,
@@ -49,22 +154,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildThemeOption(
               themeProvider,
               ThemeMode.system,
-              "System Default",
-              "Follow device settings",
+              tr("Settings.system.title"),
+              tr("Settings.system.description"),
               Icons.settings_outlined,
             ),
             _buildThemeOption(
               themeProvider,
               ThemeMode.dark,
-              "Dark Mode",
-              "Always use dark theme",
+              tr("Settings.dark.title"),
+              tr("Settings.dark.description"),
               Icons.dark_mode_outlined,
             ),
             _buildThemeOption(
               themeProvider,
               ThemeMode.light,
-              "Light Mode",
-              "Always use light theme",
+              tr("Settings.light.title"),
+              tr("Settings.light.description"),
               Icons.light_mode_outlined,
             ),
           ],
@@ -114,55 +219,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildInfoCard() {
-    return Card(
-      color: Colors.transparent,
-      elevation: 0,
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            ListTile(
-              leading: Icon(
-                Icons.info,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              title: Text(
-                "App Version",
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
-              subtitle: Text(
-                "1.0.0",
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-              contentPadding: EdgeInsets.zero,
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.restaurant_menu),
-              title: Text(
-                "Meals App",
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
-              subtitle: Text("Discover delicious recipes"),
-              contentPadding: EdgeInsets.zero,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Settings"), centerTitle: false),
+      appBar: AppBar(title: Text(tr("Global.settings")), centerTitle: false),
       body: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return SingleChildScrollView(
@@ -170,12 +230,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSectionHeader("Apperience"),
+                _buildSectionHeader(tr("Settings.apperience")),
                 SizedBox(height: 16),
                 _buildThemeCard(themeProvider),
                 SizedBox(height: 32),
 
-                _buildSectionHeader("About"),
+                _buildSectionHeader(tr("Global.language")),
+                SizedBox(height: 16),
+                _buildLanguageCard(),
+                SizedBox(height: 32),
+
+                _buildSectionHeader(tr("Global.about")),
                 SizedBox(height: 16),
                 _buildInfoCard(),
               ],
