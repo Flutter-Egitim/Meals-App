@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meals_app/providers/theme_provider.dart';
-import 'package:meals_app/screens/category_screen.dart';
 import 'package:meals_app/widget_tree.dart';
 import 'package:provider/provider.dart';
 

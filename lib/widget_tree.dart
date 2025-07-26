@@ -13,10 +13,7 @@ class WidgetTree extends StatefulWidget {
 class _WidgetTreeState extends State<WidgetTree> {
   List<Map<String, dynamic>> pages = [
     {"title": "Select Category", "widget": CategoryScreen()},
-    {
-      "title": "Favorites",
-      "widget": MealsScreen(title: "Favoriler", meals: []),
-    },
+    {"title": "Favorites", "widget": MealsScreen(title: null, meals: [])},
   ];
 
   int _selectedIndex = 0;
