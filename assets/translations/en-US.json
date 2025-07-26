@@ -1,0 +1,18 @@
+{
+    "Settings": {
+        "screenTitle": "Settings",
+        "themeModeTitle": "Appearance",
+        "darkmode": "Dark Mode",
+        "darkmodeDesc": "Always use dark theme",
+        "light": "Light Mode",
+        "lightDesc": "Always use light theme",
+        "systemDefault": "System Default",
+        "systemDefaultDesc": "Follow device settings",
+        "aboutTitle": "About",
+        "appVersionTitle": "App Version",
+        "appVersion": "1.0.0",
+        "appName": "Meals App",
+        "appDesc": "Discover delicious recipes",
+        "language": "Language"
+    }
+}

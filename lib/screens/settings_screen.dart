@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:meals_app/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  "Theme Mode",
+                  context.tr("Settings.themeModeTitle"),
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.w600,
@@ -49,22 +50,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildThemeOption(
               themeProvider,
               ThemeMode.system,
-              "System Default",
-              "Follow device settings",
+              context.tr("Settings.systemDefault"),
+              context.tr("Settings.systemDefaultDesc"),
               Icons.settings_outlined,
             ),
             _buildThemeOption(
               themeProvider,
               ThemeMode.dark,
-              "Dark Mode",
-              "Always use dark theme",
+              context.tr("Settings.darkmode"),
+              context.tr("Settings.darkmodeDesc"),
               Icons.dark_mode_outlined,
             ),
             _buildThemeOption(
               themeProvider,
               ThemeMode.light,
-              "Light Mode",
-              "Always use light theme",
+              context.tr("Settings.light"),
+              context.tr("Settings.lightDesc"),
               Icons.light_mode_outlined,
             ),
           ],
@@ -128,13 +129,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 color: Theme.of(context).colorScheme.primary,
               ),
               title: Text(
-                "App Version",
+                context.tr("Settings.appVersionTitle"),
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               subtitle: Text(
-                "1.0.0",
+                context.tr("Settings.appVersion"),
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -145,13 +146,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               leading: Icon(Icons.restaurant_menu),
               title: Text(
-                "Meals App",
+                context.tr("Settings.appName"),
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-              subtitle: Text("Discover delicious recipes"),
+              subtitle: Text(context.tr("Settings.appDesc")),
               contentPadding: EdgeInsets.zero,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageCard() {
+    final easyLocalization = EasyLocalization.of(context)!;
+    final suspportedLocales = easyLocalization.supportedLocales;
+    final currentLocale = easyLocalization.currentLocale;
+
+    return Card(
+      color: Colors.transparent,
+      elevation: 0,
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.language,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                SizedBox(width: 12),
+                Text(
+                  tr("Settings.language"),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            ...suspportedLocales.map(
+              (locale) => ListTile(
+                title: Text(
+                  locale.languageCode.toUpperCase() +
+                      (locale.countryCode != null
+                          ? " (${locale.countryCode})"
+                          : ""),
+                ),
+                trailing: Radio<Locale>(
+                  value: locale,
+                  groupValue: currentLocale,
+                  onChanged: (Locale? value) {
+                    if (value != null) {
+                      context.setLocale(value);
+                    }
+                  },
+                ),
+                onTap: () => context.setLocale(locale),
+              ),
             ),
           ],
         ),
@@ -162,7 +218,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Settings"), centerTitle: false),
+      appBar: AppBar(
+        title: Text(context.tr("Settings.screenTitle")),
+        centerTitle: false,
+      ),
       body: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return SingleChildScrollView(
@@ -170,13 +229,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSectionHeader("Apperience"),
-                SizedBox(height: 16),
+                // _buildSectionHeader(context.tr("Settings.themeModeTitle")),
+                // SizedBox(height: 16),
                 _buildThemeCard(themeProvider),
-                SizedBox(height: 32),
+                // SizedBox(height: 32),
 
-                _buildSectionHeader("About"),
-                SizedBox(height: 16),
+                // _buildSectionHeader(tr("Settings.language")),
+                _buildLanguageCard(),
+
+                // _buildSectionHeader(context.tr("Settings.aboutTitle")),
+                // SizedBox(height: 16),
                 _buildInfoCard(),
               ],
             ),
